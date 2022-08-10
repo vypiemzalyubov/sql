@@ -1,7 +1,7 @@
 # SQL
 
 <div id="header" align="center">
-  <img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/702/180/datas/original.png" width="100"/>
+  <img src="https://bornsql.ca/wp-content/uploads/2021/06/azuresql.png" width="100"/>
 </div>
 
 ---
