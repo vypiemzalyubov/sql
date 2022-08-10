@@ -1,7 +1,7 @@
 # SQL
 
 <div id="header" align="center">
-  <img src="https://media3.giphy.com/media/V8y1y1FzxDETVUtQE4/giphy.gif?cid=82a1493bunc9wz2vxh4cb0vslagxk029f6pzz0j4qzs7kt7r&rid=giphy.gif&ct=s" width="100"/>
+  <img src="https://media0.giphy.com/media/vISmwpBJUNYzukTnVx/giphy.gif?cid=82a1493bxapvy5kcawxkyzltjugpegz12rmlib1skpbpgmch&rid=giphy.gif&ct=g" width="100"/>
 </div>
 
 ---
