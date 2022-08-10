@@ -1,7 +1,7 @@
 # SQL
 
 <div id="header" align="center">
-  <img src="https://w7.pngwing.com/pngs/865/204/png-transparent-microsoft-sql-server-microsoft-azure-sql-database-computer-icons-others-text-rectangle-logo.png" width="100"/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png" width="100"/>
 </div>
 
 ---
