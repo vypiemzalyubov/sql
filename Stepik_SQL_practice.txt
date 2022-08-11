@@ -681,7 +681,36 @@
 			GROUP BY title,name_author
 		ORDER BY name_author, title
 
+Задание 76:	Вывести города, в которых живут клиенты, оформлявшие заказы в интернет-магазине. Указать количество заказов в каждый город,
+		этот столбец назвать Количество. Информацию вывести по убыванию количества заказов, а затем в алфавитном порядке по названию городов
+		
+			SELECT name_city, count(name_city) AS Количество
+			FROM city
+    				INNER JOIN client ON city.city_id = client.city_id
+    				INNER JOIN buy ON client.client_id = buy.client_id
+			GROUP BY name_city
+		ORDER BY Количество DESC, name_city
+		
+Задание 77:	Вывести номера всех оплаченных заказов и даты, когда они были оплачены
 
+			SELECT buy_id, date_step_end
+			FROM step
+    				INNER JOIN buy_step ON step.step_id = buy_step.step_id
+			WHERE buy_step.step_id = 1 AND date_step_end IS NOT NULL
+
+Задание 78:		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 
