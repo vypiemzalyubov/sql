@@ -698,8 +698,187 @@
     				INNER JOIN buy_step ON step.step_id = buy_step.step_id
 			WHERE buy_step.step_id = 1 AND date_step_end IS NOT NULL
 
-Задание 78:		
+Задание 78:	Вывести информацию о каждом заказе: его номер, кто его сформировал (фамилия пользователя) и его стоимость (сумма произведений количества заказанных 		    книг и их цены), в отсортированном по номеру заказа виде. Последний столбец назвать Стоимость	
+
+			SELECT buy.buy_id, name_client, SUM(buy_book.amount*book.price) AS Стоимость
+			FROM book
+    				INNER JOIN buy_book ON book.book_id = buy_book.book_id
+    				INNER JOIN buy ON buy_book.buy_id = buy.buy_id
+    				INNER JOIN client ON buy.client_id = client.client_id
+			GROUP by buy.buy_id
+			ORDER BY buy.buy_id
+
+Задание 79:	Вывести номера заказов (buy_id) и названия этапов,  на которых они в данный момент находятся. Если заказ доставлен –  информацию о нем не выводить. 		    Информацию отсортировать по возрастанию buy_id
+
+			SELECT buy_id, name_step
+			FROM step
+   				INNER JOIN buy_step ON step.step_id = buy_step.step_id
+   			WHERE date_step_beg IS NOT NULL AND date_step_end IS NULL
+			ORDER BY buy_id
+			
+Задание 80:	В таблице city для каждого города указано количество дней, за которые заказ может быть доставлен в этот город (рассматривается только этап 			Транспортировка). Для тех заказов, которые прошли этап транспортировки, вывести количество дней за которое заказ реально доставлен в город. А также, 		     если заказ доставлен с опозданием, указать количество дней задержки, в противном случае вывести 0. В результат включить номер заказа (buy_id), а также 		    вычисляемые столбцы Количество_дней и Опоздание. Информацию вывести в отсортированном по номеру заказа виде
 		
+			SELECT buy.buy_id, DATEDIFF(date_step_end, date_step_beg) AS Количество_дней,
+			IF(DATEDIFF(date_step_end, date_step_beg) > days_delivery, DATEDIFF(date_step_end, date_step_beg) - days_delivery, 0) AS Опоздание
+			FROM city
+   				INNER JOIN client ON city.city_id = client.city_id
+   				INNER JOIN buy ON client.client_id = buy.client_id
+   				INNER JOIN buy_step ON buy.buy_id = buy_step.buy_id
+   				INNER JOIN step ON buy_step.step_id = step.step_id
+			WHERE date_step_end IS NOT NULL AND buy_step.step_id = 3
+			ORDER BY buy.buy_id
+			
+Задание 81:	Выбрать всех клиентов, которые заказывали книги Достоевского, информацию вывести в отсортированном по алфавиту виде. В решении используйте фамилию 		   автора, а не его id
+
+			SELECT DISTINCT client.name_client
+			FROM author
+   				INNER JOIN book ON author.author_id = book.author_id
+   				INNER JOIN buy_book ON book.book_id = buy_book.book_id
+   				INNER JOIN buy ON buy_book.buy_id = buy.buy_id
+   				INNER JOIN client ON buy.client_id = client.client_id
+			WHERE author.name_author = 'Достоевский Ф.М.'
+			ORDER BY client.name_client
+			
+Задание 82:	Вывести жанр (или жанры), в котором было заказано больше всего экземпляров книг, указать это количество. Последний столбец назвать Количество
+
+			SELECT name_genre, SUM(buy_book.amount) AS Количество
+			FROM genre
+     				JOIN book USING (genre_id)
+     				JOIN buy_book USING (book_id)
+			GROUP BY name_genre
+			HAVING SUM(buy_book.amount) = (SELECT MAX(sum_amount) AS max_sum_amount
+						       FROM (SELECT genre_id, SUM(buy_book.amount) AS sum_amount
+							     FROM book JOIN buy_book USING (book_id)
+			GROUP BY genre_id) query_max)
+
+Задание 83:	Сравнить ежемесячную выручку от продажи книг за текущий и предыдущий годы. Для этого вывести год, месяц, сумму выручки в отсортированном сначала по 		    возрастанию месяцев, затем по возрастанию лет виде. Название столбцов: Год, Месяц, Сумма
+
+			SELECT YEAR(date_step_end) AS 'Год',
+				MONTHNAME(date_step_end) AS 'Месяц',
+       				SUM(book.price*buy_book.amount) AS 'Сумма'
+			FROM buy_step
+				JOIN buy_book USING (buy_id)
+				JOIN book USING (book_id)
+			WHERE step_id = 1 AND date_step_end IS NOT NULL
+			GROUP BY YEAR(date_step_end), MONTHNAME(date_step_end)
+			UNION ALL
+			SELECT YEAR(date_payment),
+       				MONTHNAME(date_payment),
+       				SUM(price*amount)
+			FROM buy_archive
+			GROUP BY YEAR(date_payment), MONTHNAME(date_payment)
+			ORDER BY 2,1;
+
+Задание 84:	Для каждой отдельной книги необходимо вывести информацию о количестве проданных экземпляров и их стоимости за текущий и предыдущий год
+		Вычисляемые столбцы назвать Количество и Сумма. Информацию отсортировать по убыванию стоимости
+		
+			SELECT title, SUM(Количество) AS Количество, SUM(Сумма) AS Сумма
+			FROM
+			   (SELECT title, SUM(buy_archive.amount) AS Количество, SUM(buy_archive.price*buy_archive.amount) AS Сумма 
+			    FROM buy_archive
+			    	JOIN book USING(book_id)
+			GROUP BY title
+
+			UNION ALL
+
+			SELECT title, SUM(buy_book.amount) AS Количество, SUM(price*buy_book.amount) AS Сумма 
+			FROM book
+				JOIN buy_book USING(book_id)
+				JOIN buy_step USING(buy_id)
+				JOIN step USING(step_id)
+			WHERE step.name_step = 'Оплата' AND buy_step.date_step_end IS NOT NULL
+			GROUP BY title) AS query_in
+			GROUP BY title
+			ORDER BY Сумма DESC
+
+Задание 85:	Включить нового человека в таблицу с клиентами. Его имя Попов Илья, его email popov@test, проживает он в Москве
+
+			INSERT INTO client (name_client, city_id, email)
+			SELECT 'Попов Илья', city_id, 'popov@test'
+			FROM city
+			WHERE name_city = 'Москва';
+
+			SELECT * FROM client;
+			
+Задание 86:	Создать новый заказ для Попова Ильи. Его комментарий для заказа: «Связаться со мной по вопросу доставки»
+
+			INSERT INTO buy (buy_description, client_id)
+			SELECT 'Связаться со мной по вопросу доставки', client_id
+			FROM client
+			WHERE name_client = 'Попов Илья';
+
+			SELECT * FROM buy;
+
+Задание 87:	В таблицу buy_book добавить заказ с номером 5. Этот заказ должен содержать книгу Пастернака «Лирика» в количестве двух экземпляров и книгу Булгакова 		     «Белая гвардия» в одном экземпляре
+
+			INSERT buy_book (buy_id, book_id, amount)
+			SELECT 5, book_id, 2
+			FROM author
+				INNER JOIN book USING(author_id)
+			WHERE name_author = 'Пастернак Б.Л.' and title = 'Лирика';
+
+			INSERT buy_book (buy_id, book_id, amount)
+			SELECT 5, book_id, 1
+			FROM author
+				INNER JOIN book USING(author_id)
+			WHERE name_author = 'Булгаков М.А.' and title = 'Белая гвардия';
+
+			SELECT * FROM buy_book;
+			
+Задание 88:	Количество тех книг на складе, которые были включены в заказ с номером 5, уменьшить на то количество, которое в заказе с номером 5  указано
+
+			UPDATE book, buy_book
+			SET book.amount = book.amount - buy_book.amount
+			WHERE buy_book.buy_id = 5 AND book.book_id = buy_book.book_id;
+
+			SELECT * FROM book;
+			
+Задание 89:	Создать счет (таблицу buy_pay) на оплату заказа с номером 5, в который включить название книг, их автора, цену, количество заказанных книг и  			стоимость. Последний столбец назвать Стоимость. Информацию в таблицу занести в отсортированном по названиям книг виде
+
+			CREATE TABLE buy_pay AS
+			SELECT title, name_author, price, buy_book.amount, book.price * buy_book.amount AS Стоимость
+			FROM buy_book
+   				JOIN book ON book.book_id = buy_book.book_id
+   				JOIN author ON author.author_id = book.author_id
+			WHERE buy_book.buy_id = 5
+			ORDER BY book.title;
+
+			SELECT * FROM buy_pay;
+
+Задание 90:	Создать общий счет (таблицу buy_pay) на оплату заказа с номером 5. Куда включить номер заказа, количество книг в заказе (название столбца Количество) и 		его общую стоимость (название столбца Итого). Для решения используйте ОДИН запрос
+
+			CREATE TABLE buy_pay
+			SELECT buy_id, SUM(buy_book.amount) AS Количество, SUM(book.price * buy_book.amount) AS Итого
+			FROM buy_book
+   				INNER JOIN book ON buy_book.book_id = book.book_id
+			GROUP BY buy_id
+			HAVING buy_book.buy_id = 5;
+
+			SELECT * FROM buy_pay;
+			
+Задание 91:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		
 
