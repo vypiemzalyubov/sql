@@ -857,3 +857,5 @@
 			SELECT * FROM buy_pay;
 			
 Задание 91:
+
+
