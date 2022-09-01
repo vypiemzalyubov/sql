@@ -856,5 +856,38 @@
 
 			SELECT * FROM buy_pay;
 			
-Задание 91:
+Задание 91:	В таблицу buy_step для заказа с номером 5 включить все этапы из таблицы step, которые должен пройти этот заказ. В столбцы date_step_beg и date_step_end
+		всех записей занести Null
+		
+			INSERT INTO buy_step (buy_id, step_id, date_step_beg, date_step_end)
+			SELECT buy_id, step_id, NULL, NULL
+			FROM step CROSS JOIN buy     
+			WHERE buy_id = 5;
 
+			SELECT * FROM buy_step;
+			
+Задание 92:	В таблицу buy_step занести дату 12.04.2020 выставления счета на оплату заказа с номером 5.
+		
+			UPDATE buy_step
+			SET date_step_beg = '2020-04-12'
+			WHERE buy_id = 5 AND step_id = 1;
+
+			SELECT * FROM buy_step;
+
+Задание 93:	Завершить этап «Оплата» для заказа с номером 5, вставив в столбец date_step_end дату 13.04.2020, и начать следующий этап («Упаковка»), задав в столбце
+		date_step_beg для этого этапа ту же дату. Реализовать два запроса для завершения этапа и начала следующего. Они должны быть записаны в общем виде,
+		чтобы его можно было применять для любых этапов, изменив только текущий этап. Для примера пусть это будет этап «Оплата»
+		
+			UPDATE buy_step
+			SET date_step_end = '2020.04.13'
+			WHERE buy_id = 5 AND step_id IN (
+    							SELECT step_id   
+    							FROM step
+    							WHERE name_step = 'Оплата');
+
+			UPDATE buy_step
+			SET date_step_beg = '2020.04.13' 
+			WHERE buy_id = 5 AND step_id IN (
+    							SELECT step_id
+    							FROM step
+    							WHERE step_id = 2 );
