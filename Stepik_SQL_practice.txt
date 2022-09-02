@@ -975,3 +975,4 @@
 				JOIN answer USING(answer_id)
 			GROUP BY name_student, name_subject, date_attempt 
 			ORDER BY name_student ASC, date_attempt DESC;
+
