@@ -991,15 +991,4 @@
 			GROUP BY name_subject, Вопрос
 			ORDER BY name_subject, Успешность DESC, Вопрос;
 
-Задание 103:
-
-
-
-
-
-
-
-
-
-
-
+Задание 103:	coming soon
