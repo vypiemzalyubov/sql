@@ -1182,25 +1182,20 @@
 
 			ALTER TABLE applicant_order ADD str_id int FIRST
 			
+Задание 122:	Занести в столбец str_id таблицы applicant_order нумерацию абитуриентов, которая начинается с 1 для каждой образовательной программы		
 			
+			SET @row_num := 1;
+			SET @num_pr := 0; 
+			UPDATE applicant_order 
+			SET str_id = IF(program_id = @num_pr, @row_num := @row_num + 1, @row_num := 1 AND @num_pr := @num_pr + 1);	
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+Задание 123:	Создать таблицу student,  в которую включить абитуриентов, которые могут быть рекомендованы к зачислению  в соответствии с планом набора. Информацию
+		отсортировать сначала в алфавитном порядке по названию программ, а потом по убыванию итогового балла
 		
-		
-		
-		
-		
-		
-		
-		
-		
+			CREATE TABLE student AS
+			SELECT program.name_program, enrollee.name_enrollee, applicant_order.itog 
+			FROM applicant_order
+				JOIN program USING (program_id)
+				JOIN enrollee USING (enrollee_id)
+			WHERE applicant_order.str_id <= program.plan
+			ORDER BY 1,3 DESC;
