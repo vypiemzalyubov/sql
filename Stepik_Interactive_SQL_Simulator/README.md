@@ -700,15 +700,18 @@ CREATE TABLE book (
 
 Оператор внутреннего соединения **INNER JOIN** соединяет две таблицы. Порядок таблиц для оператора неважен, поскольку оператор является симметричным
 
-Результат запроса формируется так: - каждая строка одной таблицы сопоставляется с каждой строкой второй таблицы
-				   - для полученной «соединённой» строки проверяется условие соединения
-				   - если условие истинно, в таблицу результата добавляется соответствующая «соединённая» строка
+Результат запроса формируется так: 
+- каждая строка одной таблицы сопоставляется с каждой строкой второй таблицы
+- для полученной «соединённой» строки проверяется условие соединения
+- если условие истинно, в таблицу результата добавляется соответствующая «соединённая» строка
+
 ```
 SELECT title, name_author
 FROM author 
 INNER JOIN book
 ON author.author_id = book.author_id;
 ```				   
+
 Поскольку поля author_id в таблицах book и author называются одинаково, необходимо в запросах указывать полную ссылку на них (book.author_id и author.author_id)
 
 В данном запросе осуществляется соединение главной таблицы author и зависимой таблицы book по ключевому столбцу author.author_id и внешнему ключу book.author_id. При этом в результирующую таблицу запроса включаются все строки, в которых значения этих столбцов совпадают. Другими словами строки зависимой таблицы book дополняются фамилией и инициалами авторов из таблицы author
@@ -720,6 +723,7 @@ ON author.author_id = book.author_id;
 Результат запроса формируется так: 
 - в результат включается внутреннее соединение (**INNER JOIN**) первой и второй таблицы в соответствии с условием
 - затем в результат добавляются те записи первой таблицы, которые не вошли во внутреннее соединение на шаге 1, для таких записей соответствующие поля второй таблицы заполняются значениями **NULL**
+
 ```
 SELECT name_author, title 
 FROM author LEFT JOIN book
@@ -735,119 +739,95 @@ ORDER BY name_author;
 
 Результат запроса формируется так: 
 - каждая строка одной таблицы соединяется с каждой строкой другой таблицы, формируя  в результате все возможные сочетания строк двух таблиц
+
 ```
 SELECT column_name(s)
 FROM table1
 CROSS JOIN table2;
 ```
 
+### Запросы на выборку из нескольких таблиц
 
+Запрос на выборку может выбирать данные из двух и более таблиц базы данных. При этом таблицы должны быть логически связаны между собой. Для каждой пары таблиц, включаемых в запрос, необходимо указать свой оператор соединения. Наиболее распространенным является внутреннее соединение **INNER JOIN****
 
-Запросы на выборку из нескольких таблиц
+```
+SELECT title, name_author, name_genre, price, amount
+FROM author 
+INNER JOIN  book ON author.author_id = book.author_id
+INNER JOIN genre ON genre.genre_id = book.genre_id
+WHERE price BETWEEN 500 AND 700;
+```
 
-Запрос на выборку может выбирать данные из двух и более таблиц базы данных. При этом таблицы должны быть логически связаны между собой. Для каждой пары таблиц, включаемых в запрос, необходимо указать свой оператор соединения. Наиболее распространенным является внутреннее соединение INNER JOIN
-
-	SELECT
-	 ...
-	FROM
-    	   first 
-   	   INNER JOIN  second ON first.first_id = second.first_id
-   	   INNER JOIN  third  ON second.second_id = third.second_id
-	...
-
-	Пример:		SELECT title, name_author, name_genre, price, amount
-			FROM
-   		   	   author 
-    		   	   INNER JOIN  book ON author.author_id = book.author_id
-    		   	   INNER JOIN genre ON genre.genre_id = book.genre_id
-			WHERE price BETWEEN 500 AND 700;
-
-
-Запросы для нескольких таблиц с группировкой
+### Запросы для нескольких таблиц с группировкой
 
 В запросах с групповыми функциями могут использоваться несколько таблиц, между которыми используются различные типы соединений
 
-	Пример:		SELECT name_author, count(title) AS Количество
-			FROM 
-    			   author INNER JOIN book
-    			   on author.author_id = book.author_id
-			GROUP BY name_author
-			ORDER BY name_author;
+```
+SELECT name_author, count(title) AS Количество
+FROM author
+INNER JOIN book ON author.author_id = book.author_id
+GROUP BY name_author
+ORDER BY name_author;
+```
 
+### Запросы для нескольких таблиц со вложенными запросами
 
-Запросы для нескольких таблиц со вложенными запросами
+В запросах, построенных на нескольких таблицах, можно использовать вложенные запросы. При этом им необходимо присваивать имя, которое записывается сразу после закрывающей скобки вложенного запроса
 
-В запросах, построенных на нескольких таблицах, можно использовать вложенные запросы. Вложенный запрос может быть включен: после ключевого слова SELECT, после FROM 
-и в условие отбора после WHERE (HAVING)
+Вложенный запрос может быть включен:
+- после ключевого слова **SELECT**
+- после **FROM** 
+- в условие отбора после **WHERE** или **HAVING**
 
-	Пример:		SELECT name_author, SUM(amount) as Количество
-			FROM 
-   			 author INNER JOIN book
-    			 on author.author_id = book.author_id
-			GROUP BY name_author
-			HAVING SUM(amount) = 
-     					(SELECT MAX(sum_amount) AS max_sum_amount
-      					 FROM 
-          				(SELECT author_id, SUM(amount) AS sum_amount 
-            				 FROM book GROUP BY author_id
-          				) query_in
-      			);
-
-
-Вложенные запросы в операторах соединения
-
-Вложенные запросы могут использоваться в операторах соединения JOIN. При этом им необходимо присваивать имя, которое записывается сразу после закрывающей скобки вложенного запроса
-
-	SELECT
- 	...
-	FROM
-    	   таблица ... JOIN  
-       		(
-        	SELECT ...
-      	 	) имя_вложенного_запроса
-    	   ON условие
-	...
+```
+SELECT name_author, SUM(amount) as Количество
+FROM author 
+INNER JOIN book ON author.author_id = book.author_id
+GROUP BY name_author
+HAVING SUM(amount) = (SELECT MAX(sum_amount) AS max_sum_amount
+		      FROM (SELECT author_id, SUM(amount) AS sum_amount 
+            		    FROM book GROUP BY author_id
+          		   ) query_in
+);
+```
 	
-Вложенный запрос может стоять как справа, так и слева от оператора JOIN. Допускается использование двух запросов в операторах соединения
+Вложенный запрос может стоять как справа, так и слева от оператора **JOIN**. Допускается использование двух запросов в операторах соединения
 
-	Пример:		SELECT  name_author, name_genre
-			FROM 
-    			   author 
-    			   INNER JOIN book ON author.author_id = book.author_id
-    			   INNER JOIN genre ON  book.genre_id = genre.genre_id
-			GROUP BY name_author,name_genre, genre.genre_id
-			HAVING genre.genre_id IN
-         					(SELECT query_in_1.genre_id
-          					FROM 
-              					(SELECT genre_id, SUM(amount) AS sum_amount
-                				FROM book
-                				GROUP BY genre_id
-               					)query_in_1
+```
+SELECT  name_author, name_genre
+FROM author 
+INNER JOIN book ON author.author_id = book.author_id
+INNER JOIN genre ON  book.genre_id = genre.genre_id
+GROUP BY name_author,name_genre, genre.genre_id
+HAVING genre.genre_id IN (SELECT query_in_1.genre_id
+          		  FROM (SELECT genre_id, SUM(amount) AS sum_amount
+                		FROM book
+                		GROUP BY genre_id
+               			)query_in_1
           		  INNER JOIN 
-             			 (SELECT genre_id, SUM(amount) AS sum_amount
+             			(SELECT genre_id, SUM(amount) AS sum_amount
                			 FROM book
                 		 GROUP BY genre_id
                 		 ORDER BY sum_amount DESC
                 		 LIMIT 1
                			 ) query_in_2
-          		 ON query_in_1.sum_amount= query_in_2.sum_amount
-         		);   
+          		  ON query_in_1.sum_amount= query_in_2.sum_amount
+);   
+```
 
+### Операция соединение, использование USING()
 
-Операция соединение, использование USING()
+При описании соединения таблиц с помощью **JOIN** в некоторых случаях вместо **ON** и следующего за ним условия можно использовать оператор **USING()**
 
-При описании соединения таблиц с помощью JOIN в некоторых случаях вместо ON и следующего за ним условия можно использовать оператор USING()
+**USING** позволяет указать набор столбцов, которые есть в обеих объединяемых таблицах. Если база данных хорошо спроектирована, а каждый внешний ключ имеет такое же имя, как и соответствующий первичный ключ (например, genre.genre_id = book.genre_id), тогда можно использовать предложение **USING** для реализации операции **JOIN**
 
-USING позволяет указать набор столбцов, которые есть в обеих объединяемых таблицах. Если база данных хорошо спроектирована, а каждый внешний ключ имеет такое же имя, как и соответствующий первичный ключ (например, genre.genre_id = book.genre_id), тогда можно использовать предложение USING для реализации операции JOIN
+При этом после **SELECT**, при использовании столбцов из **USING()**, необязательно указывать, из какой именно таблицы берется столбец
 
-При этом после SELECT, при использовании столбцов из USING(), необязательно указывать, из какой именно таблицы берется столбец
-
-	Пример:		SELECT title, name_author, author_id
-			FROM 
-    			   author INNER JOIN book
-    			   USING(author_id);
+```
+SELECT title, name_author, author_id
+FROM author 
+INNER JOIN book USING(author_id);
 		   
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
