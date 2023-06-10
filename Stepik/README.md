@@ -1,5 +1,5 @@
-## Интерактивный тренажер по SQL
+## Stepik
 
 <div id="header" align="center">
-  <img src="https://stepik.org/media/cache/images/courses/63054/cover_foIuz1t/6bc976a3abd69e9e3e5163a5973a8ccf.jpg" width="100"/>
+  <img src="https://stepik.org/static/frontend/mobile-banner/stepik_logotype_square_black.svg" width="100"/>
 </div>
