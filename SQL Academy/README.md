@@ -1,5 +1,5 @@
 ## SQL Academy
 
 <div id="header" align="center">
-  <img src="https://bornsql.ca/wp-content/uploads/2021/06/azuresql.png" width="100"/>
+  <img src="https://sql-academy.org/static/logo.svg" width="250"/>
 </div>
