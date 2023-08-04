@@ -19,3 +19,9 @@ WHERE town_from = 'Moscow';
 SELECT name
 FROM Passenger
 WHERE name LIKE '%man';
+
+-- 5. Вывести количество рейсов, совершенных на TU-134
+
+SELECT COUNT(*) AS COUNT
+FROM Trip
+WHERE plane = 'TU-154';
