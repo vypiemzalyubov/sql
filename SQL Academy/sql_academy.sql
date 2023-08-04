@@ -25,3 +25,16 @@ WHERE name LIKE '%man';
 SELECT COUNT(*) AS COUNT
 FROM Trip
 WHERE plane = 'TU-154';
+
+-- 6. Какие компании совершали перелеты на Boeing
+
+SELECT DISTINCT name
+FROM Company
+	JOIN Trip ON Company.id = Trip.company
+WHERE plane = 'Boeing';
+
+-- 7. Вывести все названия самолётов, на которых можно улететь в Москву (Moscow)
+
+SELECT DISTINCT plane
+FROM Trip
+WHERE town_to = 'Moscow';
