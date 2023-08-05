@@ -47,3 +47,16 @@ SELECT name
 FROM Company
 	JOIN Trip ON Company.id = Trip.company
 WHERE town_from = 'Vladivostok';
+
+-- 10. Вывести вылеты, совершенные с 10 ч. по 14 ч. 1 января 1900 г.
+
+SELECT *
+FROM Trip
+WHERE time_out BETWEEN '1900-01-01T10:00:00.000Z' AND '1900-01-01T14:00:00.000Z';
+
+-- 11. Выведите пассажиров с самым длинным ФИО. Пробелы, дефисы и точки считаются частью имени.
+
+SELECT name
+FROM Passenger
+ORDER BY LENGTH(name) DESC
+LIMIT 1;
