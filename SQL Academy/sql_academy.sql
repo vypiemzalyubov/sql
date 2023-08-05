@@ -38,3 +38,12 @@ WHERE plane = 'Boeing';
 SELECT DISTINCT plane
 FROM Trip
 WHERE town_to = 'Moscow';
+
+-- 8. В какие города можно улететь из Парижа (Paris) и сколько времени это займёт?
+
+-- 9. Какие компании организуют перелеты из Владивостока (Vladivostok)?
+
+SELECT name
+FROM Company
+	JOIN Trip ON Company.id = Trip.company
+WHERE town_from = 'Vladivostok';
