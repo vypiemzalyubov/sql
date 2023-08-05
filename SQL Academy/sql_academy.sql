@@ -54,7 +54,7 @@ SELECT *
 FROM Trip
 WHERE time_out BETWEEN '1900-01-01T10:00:00.000Z' AND '1900-01-01T14:00:00.000Z';
 
--- 11. Выведите пассажиров с самым длинным ФИО. Пробелы, дефисы и точки считаются частью имени.
+-- 11. Выведите пассажиров с самым длинным ФИО. Пробелы, дефисы и точки считаются частью имени
 
 SELECT name
 FROM Passenger
@@ -91,3 +91,13 @@ FROM Trip
 	JOIN Passenger ON Pass_in_trip.passenger = Passenger.id
 WHERE name = 'Steve Martin'
 	AND town_to = 'London';
+
+-- 16. Вывести отсортированный по количеству перелетов (по убыванию) и имени (по возрастанию) список пассажиров, совершивших хотя бы 1 полет
+
+SELECT name,
+	COUNT(*) as count
+FROM Pass_in_trip
+	JOIN Passenger ON Pass_in_trip.passenger = Passenger.id
+GROUP BY name
+ORDER BY count DESC,
+	name;
