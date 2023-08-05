@@ -60,3 +60,17 @@ SELECT name
 FROM Passenger
 ORDER BY LENGTH(name) DESC
 LIMIT 1;
+
+-- 12. Вывести id и количество пассажиров для всех прошедших полётов
+
+SELECT trip AS trip,
+	COUNT(passenger) AS count
+FROM Pass_in_trip
+GROUP BY trip;
+
+-- 13. Вывести имена людей, у которых есть полный тёзка среди пассажиров
+
+SELECT name
+FROM Passenger
+GROUP BY name
+HAVING COUNT(*) > 1;
