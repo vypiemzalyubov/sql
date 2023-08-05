@@ -74,3 +74,20 @@ SELECT name
 FROM Passenger
 GROUP BY name
 HAVING COUNT(*) > 1;
+
+-- 14. В какие города летал Bruce Willis
+
+SELECT town_to
+FROM Trip
+	JOIN Pass_in_trip ON Trip.id = Pass_in_trip.trip
+	JOIN Passenger ON Pass_in_trip.passenger = passenger.id
+WHERE name = 'Bruce Willis';
+
+-- 15. Выведите дату и время прилёта пассажира Стив Мартин (Steve Martin) в Лондон (London)
+
+SELECT time_in
+FROM Trip
+	JOIN Pass_in_trip ON Trip.id = Pass_in_trip.trip
+	JOIN Passenger ON Pass_in_trip.passenger = Passenger.id
+WHERE name = 'Steve Martin'
+	AND town_to = 'London';
