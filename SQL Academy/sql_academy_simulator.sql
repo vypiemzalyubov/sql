@@ -175,5 +175,16 @@ SELECT member_name,
 	SUM(amount * unit_price) AS costs
 FROM FamilyMembers AS f
 	JOIN Payments AS p ON f.member_id = p.family_member
-WHERE date BETWEEN '2005-06-01T00:00:00.000Z' AND '2005-06-30T00:00:00.000Z'
+WHERE MONTH(date) = 06
+	AND YEAR(date) = 2005
 GROUP BY member_name;
+
+-- 25. Определить, какие товары не покупались в 2005 году.
+
+SELECT good_name
+FROM Goods
+WHERE good_id NOT IN (
+		SELECT good
+		FROM Payments
+		WHERE YEAR(date) = 2005
+	)
