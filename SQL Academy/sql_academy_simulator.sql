@@ -151,3 +151,29 @@ FROM Goods AS g
 	JOIN Payments AS p ON g.good_id = p.good
 GROUP BY good
 HAVING COUNT(*) > 1;
+
+-- 22. Найти имена всех матерей (mother).
+
+SELECT member_name
+FROM FamilyMembers
+WHERE status = 'mother';
+
+-- 23. Найдите самый дорогой деликатес (delicacies) и выведите его цену.
+
+SELECT good_name,
+	unit_price
+FROM Payments AS p
+	JOIN Goods AS g ON g.good_id = p.good
+	JOIN GoodTypes AS gt ON g.type = gt.good_type_id
+WHERE good_type_name = 'delicacies'
+ORDER BY unit_price DESC
+LIMIT 1;
+
+-- 24. Определить кто и сколько потратил в июне 2005.
+
+SELECT member_name,
+	SUM(amount * unit_price) AS costs
+FROM FamilyMembers AS f
+	JOIN Payments AS p ON f.member_id = p.family_member
+WHERE date BETWEEN '2005-06-01T00:00:00.000Z' AND '2005-06-30T00:00:00.000Z'
+GROUP BY member_name;
