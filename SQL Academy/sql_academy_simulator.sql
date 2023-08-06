@@ -131,3 +131,23 @@ FROM FamilyMembers AS f
 	JOIN Payments AS p ON f.member_id = p.family_member
 	JOIN Goods AS g ON p.good = g.good_id
 WHERE good_name = 'potato';
+
+-- 20. Сколько и кто из семьи потратил на развлечения (entertainment). Вывести статус в семье, имя, сумму.
+
+SELECT status,
+	member_name,
+	SUM(amount * unit_price) AS costs
+FROM FamilyMembers AS f
+	JOIN Payments AS p ON f.member_id = p.family_member
+	JOIN Goods AS g ON p.good = g.good_id
+	JOIN GoodTypes AS gt ON g.type = gt.good_type_id
+WHERE good_type_name = 'entertainment'
+GROUP BY family_member;
+
+-- 21. Определить товары, которые покупали более 1 раза.
+
+SELECT good_name
+FROM Goods AS g
+	JOIN Payments AS p ON g.good_id = p.good
+GROUP BY good
+HAVING COUNT(*) > 1;
