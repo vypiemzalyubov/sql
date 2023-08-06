@@ -188,3 +188,15 @@ WHERE good_id NOT IN (
 		FROM Payments
 		WHERE YEAR(date) = 2005
 	)
+
+-- 26. Определить группы товаров, которые не приобретались в 2005 году.
+
+SELECT good_type_name
+FROM GoodTypes
+WHERE good_type_id NOT IN (
+		SELECT good_type_id
+		FROM GoodTypes AS gt
+			JOIN Goods AS g ON gt.good_type_id = g.type
+			JOIN Payments AS p ON g.good_id = p.good
+		WHERE YEAR(date) = 2005
+	);
