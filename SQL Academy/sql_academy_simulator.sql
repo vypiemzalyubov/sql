@@ -200,3 +200,30 @@ WHERE good_type_id NOT IN (
 			JOIN Payments AS p ON g.good_id = p.good
 		WHERE YEAR(date) = 2005
 	);
+
+-- 27. Узнать, сколько потрачено на каждую из групп товаров в 2005 году. Вывести название группы и сумму.
+
+SELECT good_type_name,
+	SUM(amount * unit_price) AS costs
+FROM GoodTypes AS gt
+	JOIN Goods AS g ON gt.good_type_id = g.type
+	JOIN Payments AS p ON g.good_id = p.good
+WHERE YEAR(date) = 2005
+GROUP BY good_type_name;
+
+-- 28. Сколько рейсов совершили авиакомпании из Ростова (Rostov) в Москву (Moscow)?
+
+SELECT COUNT(*) as count
+FROM Trip
+WHERE town_from = 'Rostov'
+	AND town_to = 'Moscow';
+
+-- 29. Выведите имена пассажиров улетевших в Москву (Moscow) на самолете TU-134.
+
+SELECT name
+FROM Passenger AS p
+	JOIN Pass_in_trip AS pit ON p.id = pit.passenger
+	JOIN Trip AS t ON pit.trip = t.id
+WHERE town_to = 'Moscow'
+	AND plane = 'TU-134'
+GROUP BY name;
