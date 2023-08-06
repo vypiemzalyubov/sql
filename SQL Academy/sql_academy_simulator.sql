@@ -1,39 +1,39 @@
--- 1. Вывести имена всех людей, которые есть в базе данных авиакомпаний
+-- 1. Вывести имена всех людей, которые есть в базе данных авиакомпаний.
 
 SELECT name
 FROM Passenger;
 
--- 2. Вывести названия всеx авиакомпаний
+-- 2. Вывести названия всеx авиакомпаний.
 
 SELECT name
 FROM Company;
 
--- 3. Вывести все рейсы, совершенные из Москвы
+-- 3. Вывести все рейсы, совершенные из Москвы.
 
 SELECT *
 FROM Trip
 WHERE town_from = 'Moscow';
 
--- 4. Вывести имена людей, которые заканчиваются на "man"
+-- 4. Вывести имена людей, которые заканчиваются на "man".
 
 SELECT name
 FROM Passenger
 WHERE name LIKE '%man';
 
--- 5. Вывести количество рейсов, совершенных на TU-134
+-- 5. Вывести количество рейсов, совершенных на TU-134.
 
 SELECT COUNT(*) AS COUNT
 FROM Trip
 WHERE plane = 'TU-154';
 
--- 6. Какие компании совершали перелеты на Boeing
+-- 6. Какие компании совершали перелеты на Boeing.
 
 SELECT DISTINCT name
 FROM Company
 	JOIN Trip ON Company.id = Trip.company
 WHERE plane = 'Boeing';
 
--- 7. Вывести все названия самолётов, на которых можно улететь в Москву (Moscow)
+-- 7. Вывести все названия самолётов, на которых можно улететь в Москву (Moscow).
 
 SELECT DISTINCT plane
 FROM Trip
@@ -59,28 +59,28 @@ SELECT *
 FROM Trip
 WHERE time_out BETWEEN '1900-01-01T10:00:00.000Z' AND '1900-01-01T14:00:00.000Z';
 
--- 11. Выведите пассажиров с самым длинным ФИО. Пробелы, дефисы и точки считаются частью имени
+-- 11. Выведите пассажиров с самым длинным ФИО. Пробелы, дефисы и точки считаются частью имени.
 
 SELECT name
 FROM Passenger
 ORDER BY LENGTH(name) DESC
 LIMIT 1;
 
--- 12. Вывести id и количество пассажиров для всех прошедших полётов
+-- 12. Вывести id и количество пассажиров для всех прошедших полётов.
 
 SELECT trip AS trip,
 	COUNT(passenger) AS count
 FROM Pass_in_trip
 GROUP BY trip;
 
--- 13. Вывести имена людей, у которых есть полный тёзка среди пассажиров
+-- 13. Вывести имена людей, у которых есть полный тёзка среди пассажиров.
 
 SELECT name
 FROM Passenger
 GROUP BY name
 HAVING COUNT(*) > 1;
 
--- 14. В какие города летал Bruce Willis
+-- 14. В какие города летал Bruce Willis.
 
 SELECT town_to
 FROM Trip
@@ -88,7 +88,7 @@ FROM Trip
 	JOIN Passenger ON Pass_in_trip.passenger = passenger.id
 WHERE name = 'Bruce Willis';
 
--- 15. Выведите дату и время прилёта пассажира Стив Мартин (Steve Martin) в Лондон (London)
+-- 15. Выведите дату и время прилёта пассажира Стив Мартин (Steve Martin) в Лондон (London).
 
 SELECT time_in
 FROM Trip
@@ -97,7 +97,7 @@ FROM Trip
 WHERE name = 'Steve Martin'
 	AND town_to = 'London';
 
--- 16. Вывести отсортированный по количеству перелетов (по убыванию) и имени (по возрастанию) список пассажиров, совершивших хотя бы 1 полет
+-- 16. Вывести отсортированный по количеству перелетов (по убыванию) и имени (по возрастанию) список пассажиров, совершивших хотя бы 1 полет.
 
 SELECT name,
 	COUNT(*) as count
@@ -106,3 +106,13 @@ FROM Pass_in_trip
 GROUP BY name
 ORDER BY count DESC,
 	name;
+
+-- 17. Определить, сколько потратил в 2005 году каждый из членов семьи. В результирующей выборке не выводите тех членов семьи, которые ничего не потратили.
+
+SELECT member_name,
+	status,
+	SUM(amount * unit_price) AS costs
+FROM FamilyMembers
+	JOIN Payments ON FamilyMembers.member_id = Payments.family_member
+WHERE date BETWEEN '2005-01-01T00:00:00.000Z' AND '2005-12-31T00:00:00.000Z'
+GROUP BY family_member;
