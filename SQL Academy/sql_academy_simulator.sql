@@ -116,3 +116,18 @@ FROM FamilyMembers
 	JOIN Payments ON FamilyMembers.member_id = Payments.family_member
 WHERE date BETWEEN '2005-01-01T00:00:00.000Z' AND '2005-12-31T00:00:00.000Z'
 GROUP BY family_member;
+
+-- 18. Узнать, кто старше всех в семьe.
+
+SELECT member_name
+FROM FamilyMembers
+ORDER BY birthday
+LIMIT 1;
+
+-- 19. Определить, кто из членов семьи покупал картошку (potato).
+
+SELECT DISTINCT status
+FROM FamilyMembers AS f
+	JOIN Payments AS p ON f.member_id = p.family_member
+	JOIN Goods AS g ON p.good = g.good_id
+WHERE good_name = 'potato';
