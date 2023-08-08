@@ -235,3 +235,9 @@ SELECT trip,
 FROM Pass_in_trip
 GROUP BY trip
 ORDER BY 2 DESC;
+
+-- 31. Вывести всех членов семьи с фамилией Quincey.
+
+SELECT *
+FROM FamilyMembers
+WHERE member_name LIKE '%Quincey';
