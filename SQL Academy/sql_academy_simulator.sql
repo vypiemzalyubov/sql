@@ -227,3 +227,11 @@ FROM Passenger AS p
 WHERE town_to = 'Moscow'
 	AND plane = 'TU-134'
 GROUP BY name;
+
+-- 30. Выведите нагруженность (число пассажиров) каждого рейса (trip). Результат вывести в отсортированном виде по убыванию нагруженности.
+
+SELECT trip,
+	COUNT(*) AS count
+FROM Pass_in_trip
+GROUP BY trip
+ORDER BY 2 DESC;
