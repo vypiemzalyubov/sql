@@ -241,3 +241,8 @@ ORDER BY 2 DESC;
 SELECT *
 FROM FamilyMembers
 WHERE member_name LIKE '%Quincey';
+
+-- 32. Вывести средний возраст людей (в годах), хранящихся в базе данных. Результат округлите до целого в меньшую сторону.
+
+SELECT FLOOR(AVG(YEAR(CURRENT_DATE) - YEAR(birthday))) AS age
+FROM FamilyMembers;
