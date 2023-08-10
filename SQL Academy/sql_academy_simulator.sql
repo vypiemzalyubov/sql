@@ -279,3 +279,16 @@ WHERE address LIKE '%Pushkina%';
 
 SELECT MIN(TIMESTAMPDIFF(YEAR, birthday, CURRENT_DATE)) AS year
 FROM Student;
+
+-- 38. Сколько Анн (Anna) учится в школе?
+
+SELECT COUNT(*) AS count
+FROM Student
+WHERE first_name = 'Anna';
+
+-- 39. Сколько обучающихся в 10 B классе?
+
+SELECT COUNT(*) AS count
+FROM Class AS c
+	JOIN Student_in_class AS sic ON c.id = sic.class
+WHERE name LIKE '10 B';
