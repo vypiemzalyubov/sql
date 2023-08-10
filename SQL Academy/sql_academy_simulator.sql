@@ -325,3 +325,20 @@ SELECT TIMEDIFF(
 	) AS time
 FROM Timepair
 LIMIT 1;
+
+-- 43. Выведите фамилии преподавателей, которые ведут физическую культуру (Physical Culture). Отcортируйте преподавателей по фамилии.
+
+SELECT last_name
+FROM Teacher AS t
+	JOIN Schedule AS sch ON t.id = sch.teacher
+	JOIN Subject AS sbj ON sch.subject = sbj.id
+WHERE name = 'Physical Culture'
+ORDER BY 1;
+
+-- 44. Найдите максимальный возраст (колич. лет) среди обучающихся 10 классов?
+
+SELECT MAX(TIMESTAMPDIFF(YEAR, birthday, CURRENT_DATE)) AS max_year
+FROM Student AS std
+	JOIN Student_in_class AS sic ON std.id = sic.student
+	JOIN Class AS c ON sic.class = c.id
+WHERE name LIKE '10%';
