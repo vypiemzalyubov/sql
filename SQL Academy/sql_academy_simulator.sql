@@ -342,3 +342,16 @@ FROM Student AS std
 	JOIN Student_in_class AS sic ON std.id = sic.student
 	JOIN Class AS c ON sic.class = c.id
 WHERE name LIKE '10%';
+
+-- 45. Какие кабинеты чаще всего использовались для проведения занятий? Выведите те, которые использовались максимальное количество раз.
+
+SELECT classroom
+FROM Schedule
+GROUP BY classroom
+HAVING COUNT(*) = (
+		SELECT COUNT(*)
+		FROM Schedule
+		GROUP BY classroom
+		ORDER BY 1 DESC
+		LIMIT 1
+	);
