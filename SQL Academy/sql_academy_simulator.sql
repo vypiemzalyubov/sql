@@ -254,3 +254,17 @@ FROM Payments AS p
 	JOIN Goods AS g ON p.good = g.good_id
 WHERE good_name = 'red caviar'
 	OR good_name = 'black caviar';
+
+-- 34. Сколько всего 10-ых классов.
+
+SELECT COUNT(*) AS count
+FROM Class
+WHERE name LIKE '10%';
+
+-- 35. Сколько различных кабинетов школы использовались 2.09.2019 в образовательных целях?
+
+SELECT COUNT(*) AS count
+FROM Schedule
+WHERE DAY(date) = 2
+	AND MONTH(date) = 09
+	AND YEAR(date) = 2019;
