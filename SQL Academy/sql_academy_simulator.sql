@@ -246,3 +246,11 @@ WHERE member_name LIKE '%Quincey';
 
 SELECT FLOOR(AVG(YEAR(CURRENT_DATE) - YEAR(birthday))) AS age
 FROM FamilyMembers;
+
+-- 33. Найдите среднюю стоимость икры. В базе данных хранятся данные о покупках красной (red caviar) и черной икры (black caviar).
+
+SELECT AVG(unit_price) AS cost
+FROM Payments AS p
+	JOIN Goods AS g ON p.good = g.good_id
+WHERE good_name = 'red caviar'
+	OR good_name = 'black caviar';
