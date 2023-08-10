@@ -268,3 +268,14 @@ FROM Schedule
 WHERE DAY(date) = 2
 	AND MONTH(date) = 09
 	AND YEAR(date) = 2019;
+
+-- 36. Выведите информацию об обучающихся живущих на улице Пушкина (ul. Pushkina)?
+
+SELECT *
+FROM Student
+WHERE address LIKE '%Pushkina%';
+
+-- 37. Сколько лет самому молодому обучающемуся?
+
+SELECT MIN(TIMESTAMPDIFF(YEAR, birthday, CURRENT_DATE)) AS year
+FROM Student;
