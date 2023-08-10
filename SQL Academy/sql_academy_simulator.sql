@@ -292,3 +292,19 @@ SELECT COUNT(*) AS count
 FROM Class AS c
 	JOIN Student_in_class AS sic ON c.id = sic.class
 WHERE name LIKE '10 B';
+
+-- 40. Выведите название предметов, которые преподает Ромашкин П.П. (Romashkin P.P.)?
+
+SELECT name AS subjects
+FROM Subject AS sbj
+	JOIN Schedule AS sch ON sbj.id = sch.subject
+	JOIN Teacher AS tch ON sch.teacher = tch.id
+WHERE last_name = 'Romashkin'
+	AND first_name LIKE 'P%'
+	AND middle_name LIKE 'P%';
+
+-- 41. Во сколько начинается 4-ый учебный предмет по расписанию?
+
+SELECT start_pair
+FROM Timepair
+WHERE id = 4;
