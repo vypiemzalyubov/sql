@@ -403,3 +403,5 @@ SELECT FLOOR(
 	) AS percent
 FROM Student
 WHERE YEAR(birthday) = 2000;
+
+-- 51.
