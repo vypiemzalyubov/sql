@@ -355,3 +355,11 @@ HAVING COUNT(*) = (
 		ORDER BY 1 DESC
 		LIMIT 1
 	);
+
+-- 46. В каких классах введет занятия преподаватель "Krauze"?
+
+SELECT DISTINCT name
+from Class AS c
+	JOIN Schedule AS sch ON c.id = sch.class
+	JOIN Teacher AS tch ON sch.teacher = tch.id
+WHERE last_name LIKE '%Krauze'
