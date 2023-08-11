@@ -373,3 +373,33 @@ WHERE YEAR(date) = 2019
 	AND MONTH(date) = 08
 	AND DAY(date) = 30
 	AND last_name = 'Krauze';
+
+-- 48. Выведите заполненность классов в порядке убывания.
+
+SELECT name,
+	COUNT(*) AS count
+FROM Class AS c
+	JOIN Student_in_class AS sic ON c.id = sic.class
+GROUP BY class
+ORDER BY 2 DESC;
+
+-- 49. Какой процент обучающихся учится в 10 A классе?
+
+SELECT COUNT(*) * 100 / (
+		SELECT COUNT(*)
+		FROM Student_in_class
+	) AS percent
+FROM Student_in_class sic
+	JOIN Class c ON sic.class = c.id
+WHERE name = '10 A';
+
+-- 50. Какой процент обучающихся родился в 2000 году? Результат округлить до целого в меньшую сторону.
+
+SELECT FLOOR(
+		COUNT(*) * 100 / (
+			SELECT COUNT(*)
+			FROM Student
+		)
+	) AS percent
+FROM Student
+WHERE YEAR(birthday) = 2000;
