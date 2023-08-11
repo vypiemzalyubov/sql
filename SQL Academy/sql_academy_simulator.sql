@@ -362,4 +362,14 @@ SELECT DISTINCT name
 from Class AS c
 	JOIN Schedule AS sch ON c.id = sch.class
 	JOIN Teacher AS tch ON sch.teacher = tch.id
-WHERE last_name LIKE '%Krauze'
+WHERE last_name = 'Krauze';
+
+-- 47. Сколько занятий провел Krauze 30 августа 2019 г.?
+
+SELECT COUNT(*) AS count
+FROM Schedule AS sch
+	JOIN Teacher AS tch ON sch.teacher = tch.id
+WHERE YEAR(date) = 2019
+	AND MONTH(date) = 08
+	AND DAY(date) = 30
+	AND last_name = 'Krauze';
