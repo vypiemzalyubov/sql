@@ -459,3 +459,9 @@ WHERE c.id IN (
 
 DELETE FROM Trip
 WHERE town_from = 'Moscow';
+
+-- 57. Перенести расписание всех занятий на 30 мин. вперед.
+
+UPDATE Timepair
+SET start_pair = start_pair + INTERVAL 30 MINUTE,
+	end_pair = end_pair + INTERVAL 30 MINUTE;
