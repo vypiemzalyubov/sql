@@ -432,3 +432,30 @@ SET good_type_id = (
 UPDATE FamilyMembers
 SET member_name = 'Andie Anthony'
 WHERE member_name = 'Andie Quincey';
+
+-- 54. Удалить всех членов семьи с фамилией "Quincey".
+
+DELETE FROM FamilyMembers
+WHERE member_name LIKE '%Quincey';
+
+-- 55. Удалить компании, совершившие наименьшее количество рейсов.
+
+DELETE FROM Company AS c
+WHERE c.id IN (
+		SELECT company
+		FROM Trip
+		GROUP BY company
+		HAVING COUNT(*) = (
+				SELECT MIN(count)
+				FROM (
+						SELECT COUNT(*) AS count
+						FROM Trip
+						GROUP BY company
+					) AS min_count
+			)
+	);
+
+-- 56. Удалить все перелеты, совершенные из Москвы (Moscow).
+
+DELETE FROM Trip
+WHERE town_from = 'Moscow';
