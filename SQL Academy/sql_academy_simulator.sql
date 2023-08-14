@@ -417,3 +417,18 @@ SET good_id = (
 		FROM GoodTypes
 		WHERE good_type_name = 'food'
 	);
+
+-- 52. Добавьте в список типов товаров (GoodTypes) новый тип "auto". В качестве первичного ключа (good_type_id) укажите количество записей в таблице + 1.
+
+INSERT INTO GoodTypes
+SET good_type_id = (
+		SELECT COUNT(*) + 1
+		FROM GoodTypes AS gt
+	),
+	good_type_name = 'auto';
+
+-- 53. Измените имя "Andie Quincey" на новое "Andie Anthony".
+
+UPDATE FamilyMembers
+SET member_name = 'Andie Anthony'
+WHERE member_name = 'Andie Quincey';
