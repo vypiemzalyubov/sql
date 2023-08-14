@@ -404,4 +404,16 @@ SELECT FLOOR(
 FROM Student
 WHERE YEAR(birthday) = 2000;
 
--- 51.
+-- 51. Добавьте товар с именем "Cheese" и типом "food" в список товаров (Goods). В качестве первичного ключа (good_id) укажите количество записей в таблице + 1.
+
+INSERT INTO Goods
+SET good_id = (
+		SELECT COUNT(*) + 1
+		FROM Goods AS g
+	),
+	good_name = 'Cheese',
+	type = (
+		SELECT good_type_id
+		FROM GoodTypes
+		WHERE good_type_name = 'food'
+	);
