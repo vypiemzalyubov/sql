@@ -506,3 +506,19 @@ FROM Rooms
 	JOIN Reservations ON Rooms.id = Reservations.room_id
 WHERE WEEK(start_date, 1) = 12
 	AND YEAR(start_date) = 2020;
+
+-- 62. Вывести в порядке убывания популярности доменные имена 2-го уровня, используемые пользователями для электронной почты. 
+--     Полученный результат необходимо дополнительно отсортировать по возрастанию названий доменных имён.
+
+SELECT SUBSTRING_INDEX(email, '@', -1) AS domain,
+	COUNT(SUBSTRING_INDEX(email, '@', -1)) AS count
+FROM Users
+GROUP BY domain
+ORDER BY 2 DESC,
+	1;
+
+-- 63. Выведите отсортированный список (по возрастанию) фамилий и имен студентов в виде Фамилия.И.
+
+SELECT CONCAT(last_name, '.', LEFT(first_name, 1), '.') AS name
+FROM Student
+ORDER BY 1;
