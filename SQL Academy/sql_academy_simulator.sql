@@ -534,3 +534,11 @@ GROUP BY year,
 HAVING COUNT(*) > 0
 ORDER BY year,
 	month;
+
+-- 65. Необходимо вывести рейтинг для комнат, которые хоть раз арендовали, как среднее значение рейтинга отзывов округленное до целого вниз.
+
+SELECT room_id,
+	FLOOR(AVG(rating)) as rating
+FROM Reservations AS res
+	JOIN Reviews as rws ON res.id = rws.reservation_id
+GROUP BY room_id;
