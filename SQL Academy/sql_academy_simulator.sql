@@ -483,3 +483,26 @@ SET id = (
 		WHERE rms.address = '11218, Friel Place, New York'
 			AND usr.name = 'George Clooney'
 	)
+
+-- 59. Вывести пользователей,указавших Белорусский номер телефона ? Телефонный код Белоруссии +375.
+
+SELECT *
+FROM Users
+WHERE phone_number LIKE '+375%';
+
+-- 60. Выведите идентификаторы преподавателей, которые хотя бы один раз за всё время преподавали в каждом из одиннадцатых классов.
+
+SELECT teacher
+FROM Schedule AS sch
+	JOIN class AS cls ON sch.class = cls.id
+WHERE name LIKE '11%'
+GROUP BY teacher
+HAVING COUNT(DISTINCT name) > 1;
+
+-- 61. Выведите список комнат, которые были зарезервированы в течение 12 недели 2020 года.
+
+SELECT DISTINCT Rooms.*
+FROM Rooms
+	JOIN Reservations ON Rooms.id = Reservations.room_id
+WHERE WEEK(start_date, 1) = 12
+	AND YEAR(start_date) = 2020;
