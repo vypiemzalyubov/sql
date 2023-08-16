@@ -465,3 +465,21 @@ WHERE town_from = 'Moscow';
 UPDATE Timepair
 SET start_pair = start_pair + INTERVAL 30 MINUTE,
 	end_pair = end_pair + INTERVAL 30 MINUTE;
+
+-- 58. Добавить отзыв с рейтингом 5 на жилье, находящиеся по адресу "11218, Friel Place, New York", от имени "George Clooney". 
+--     В качестве первичного ключа (id) укажите количество записей в таблице + 1. Резервация комнаты, на которую вам нужно оставить отзыв, уже была сделана, нужно лишь ее найти.
+
+INSERT INTO Reviews
+SET id = (
+		SELECT COUNT(*) + 1
+		FROM Reviews AS a
+	),
+	rating = 5,
+	reservation_id = (
+		SELECT res.id
+		FROM Reservations AS res
+			JOIN Rooms AS rms ON res.room_id = rms.id
+			JOIN Users AS usr ON res.user_id = usr.id
+		WHERE rms.address = '11218, Friel Place, New York'
+			AND usr.name = 'George Clooney'
+	)
