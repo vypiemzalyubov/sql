@@ -522,3 +522,15 @@ ORDER BY 2 DESC,
 SELECT CONCAT(last_name, '.', LEFT(first_name, 1), '.') AS name
 FROM Student
 ORDER BY 1;
+
+-- 64. Вывести количество бронирований по каждому месяцу каждого года, в которых было хотя бы 1 бронирование. Результат отсортируйте в порядке возрастания даты бронирования.
+
+SELECT YEAR(start_date) AS year,
+	MONTH(start_date) AS month,
+	COUNT(*) AS amount
+FROM Reservations
+GROUP BY year,
+	month
+HAVING COUNT(*) > 0
+ORDER BY year,
+	month;
