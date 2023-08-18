@@ -542,3 +542,24 @@ SELECT room_id,
 FROM Reservations AS res
 	JOIN Reviews as rws ON res.id = rws.reservation_id
 GROUP BY room_id;
+
+-- 66. Вывести список комнат со всеми удобствами (наличие ТВ, интернета, кухни и кондиционера), а также общее количество дней и сумму за все дни аренды каждой из таких комнат.
+-- 	   Если комната не сдавалась, то количество дней и сумму вывести как 0.
+
+SELECT home_type,
+	address,
+	IFNULL(SUM(TIMESTAMPDIFF(DAY, start_date, end_date)), 0) AS days,
+	IFNULL(SUM(total), 0) AS total_fee
+FROM Rooms AS r
+	LEFT JOIN Reservations AS res ON r.id = res.room_id
+WHERE (has_tv, has_internet, has_kitchen, has_air_con) = (1, 1, 1, 1)
+GROUP BY r.id;
+
+-- 67. Вывести время отлета и время прилета для каждого перелета в формате "ЧЧ:ММ, ДД.ММ - ЧЧ:ММ, ДД.ММ", где часы и минуты с ведущим нулем, а день и месяц без.
+
+SELECT CONCAT(
+		DATE_FORMAT(time_out, '%H:%i, %e.%c'),
+		' - ',
+		DATE_FORMAT(time_in, '%H:%i, %e.%c')
+	) AS flight_time
+FROM Trip;
