@@ -563,3 +563,16 @@ SELECT CONCAT(
 		DATE_FORMAT(time_in, '%H:%i, %e.%c')
 	) AS flight_time
 FROM Trip;
+
+-- 68. Для каждой комнаты, которую снимали как минимум 1 раз, найдите имя человека, снимавшего ее последний раз, и дату, когда он выехал.
+
+SELECT room_id,
+	name,
+	end_date
+FROM Reservations
+	JOIN Users ON Reservations.user_id = Users.id
+WHERE end_date IN (
+		SELECT MAX(end_date)
+		FROM Reservations
+		GROUP BY room_id
+	);
