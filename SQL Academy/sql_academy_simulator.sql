@@ -576,3 +576,11 @@ WHERE end_date IN (
 		FROM Reservations
 		GROUP BY room_id
 	);
+
+-- 69. Вывести идентификаторы всех владельцев комнат, что размещены на сервисе бронирования жилья и сумму, которую они заработали.
+
+SELECT owner_id,
+	IFNULL(SUM(total), 0) AS total_earn
+FROM Rooms AS r
+	LEFT JOIN Reservations AS res ON r.id = res.room_id
+GROUP BY owner_id;
