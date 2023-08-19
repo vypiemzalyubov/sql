@@ -584,3 +584,42 @@ SELECT owner_id,
 FROM Rooms AS r
 	LEFT JOIN Reservations AS res ON r.id = res.room_id
 GROUP BY owner_id;
+
+-- 70. Необходимо категоризовать жилье на economy, comfort, premium по цене соответственно <= 100, 100 < цена < 200, >= 200. 
+--     В качестве результата вывести таблицу с названием категории и количеством жилья, попадающего в данную категорию.
+
+SELECT CASE
+		WHEN price <= 100 THEN 'economy'
+		WHEN price > 100 AND price < 200 THEN 'comfort'
+		ELSE 'premium'
+	END AS category,
+	COUNT(*) AS count
+FROM Rooms
+GROUP BY category;
+
+-- 71. Найдите какой процент пользователей, зарегистрированных на сервисе бронирования, хоть раз арендовали или сдавали в аренду жилье. Результат округлите до сотых.
+
+SELECT ROUND(
+		(
+			SELECT COUNT(*)
+			FROM (
+					SELECT DISTINCT owner_id
+					FROM Rooms
+						JOIN Reservations ON Rooms.id = Reservations.room_id
+					UNION
+					SELECT DISTINCT user_id
+					FROM Reservations
+				) AS active_users
+		) * 100 /(
+			SELECT COUNT(id)
+			FROM Users
+		),
+		2
+	) AS percent;
+
+-- 72. Выведите среднюю стоимость бронирования для комнат, которых бронировали хотя бы один раз. Среднюю стоимость необходимо округлить до целого значения вверх.
+
+SELECT room_id,
+	CEILING(AVG(price)) AS avg_price
+FROM Reservations
+GROUP BY room_id;
