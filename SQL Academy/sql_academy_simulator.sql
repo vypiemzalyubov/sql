@@ -540,7 +540,7 @@ ORDER BY year,
 SELECT room_id,
 	FLOOR(AVG(rating)) as rating
 FROM Reservations AS res
-	JOIN Reviews as rws ON res.id = rws.reservation_id
+	JOIN Reviews AS rws ON res.id = rws.reservation_id
 GROUP BY room_id;
 
 -- 66. Вывести список комнат со всеми удобствами (наличие ТВ, интернета, кухни и кондиционера), а также общее количество дней и сумму за все дни аренды каждой из таких комнат.
@@ -623,3 +623,50 @@ SELECT room_id,
 	CEILING(AVG(price)) AS avg_price
 FROM Reservations
 GROUP BY room_id;
+
+-- 73. Выведите id тех комнат, которые арендовали нечетное количество раз.
+
+SELECT room_id,
+	COUNT(*) AS count
+FROM Reservations
+GROUP BY room_id
+HAVING count % 2 != 0;
+
+-- 74. Выведите идентификатор и признак наличия интернета в помещении. Если интернет в сдаваемом жилье присутствует, то выведите «YES», иначе «NO».
+
+SELECT id,
+	CASE
+		WHEN has_internet = true THEN 'YES'
+		ELSE 'NO'
+	END AS has_internet
+FROM Rooms;
+
+-- 75. Выведите фамилию, имя и дату рождения студентов, кто был рожден в мае.
+
+SELECT last_name,
+	first_name,
+	birthday
+FROM Student
+WHERE MONTH(birthday) = 5;
+
+-- 76. Вывести имена всех пользователей сервиса бронирования жилья, а также два признака: является ли пользователь собственником какого-либо жилья (is_owner)
+--     и является ли пользователь арендатором (is_tenant). В случае наличия у пользователя признака необходимо вывести в соответствующее поле 1, иначе 0.
+
+SELECT name,
+	IF(
+		id IN (
+			SELECT DISTINCT owner_id
+			FROM Rooms
+		),
+		1,
+		0
+	) AS is_owner,
+	IF(
+		id IN (
+			SELECT DISTINCT user_id
+			FROM Reservations
+		),
+		1,
+		0
+	) AS is_tenant
+FROM Users;
