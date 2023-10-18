@@ -1,7 +1,7 @@
 ## SQL
 
 <div id="header" align="center">
-  <img src="https://bornsql.ca/wp-content/uploads/2021/06/azuresql.png" width="100"/>
+  <img src="https://baffle.io/wp-content/uploads/2023/06/sql-azure.png" width="100"/>
 </div>
 
 - [**SQL Academy**](https://github.com/vypiemzalyubov/sql/tree/main/SQL%20Academy)
