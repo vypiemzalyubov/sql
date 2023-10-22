@@ -2,6 +2,8 @@
 
 Пошаговый интерактивный курс с практическими заданиями
 
+---
+
 - [**Фундаментальные основы**](https://github.com/vypiemzalyubov/sql/tree/main/SQL%20Academy/Interactive%20SQL%20course/1.%20Fundamental%20foundations)
 - [**Основы выборки I**](https://github.com/vypiemzalyubov/sql/tree/main/SQL%20Academy/Interactive%20SQL%20course/2.%20Fundamentals%20of%20sampling%20I)
 - [**Основы выборки II**](https://github.com/vypiemzalyubov/sql/tree/main/SQL%20Academy/Interactive%20SQL%20course/3.%20Fundamentals%20of%20sampling%20II)
